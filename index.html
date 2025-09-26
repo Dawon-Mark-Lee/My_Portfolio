@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Da-won Lee | Blockchain Developer Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root{
+            --bg: #0b1020;
+            --panel: #0f1724;
+            --muted: #9aa4b2;
+            --glass: rgba(255,255,255,0.04);
+        }
+        html,body{height:100%;}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(59,130,246,0.08), transparent),
+                        radial-gradient(900px 500px at 90% 90%, rgba(109,40,217,0.06), transparent),
+                        var(--bg);
+            color: #E0E0E0;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3B82F6, #6D28D9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Animated floating blob behind hero */
+        .hero-blob{
+            position:absolute; inset:0; pointer-events:none; z-index:0;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .blob{
+            width:520px; height:520px; border-radius:48% 52% 60% 40%/40% 60% 40% 60%;
+            background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(109,40,217,0.18));
+            filter: blur(48px); transform: translateZ(0);
+            animation: float 8s ease-in-out infinite;
+        }
+        /* Thumbnail inside project card */
+        .proj-thumb{width:88px;height:64px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(109,40,217,0.08));display:flex;align-items:center;justify-content:center}
+        .proj-thumb img{max-width:84px;max-height:60px;border-radius:6px}
+        /* Reveal on scroll */
+        .reveal{opacity:0;transform:translateY(14px) scale(0.995);transition:all 520ms cubic-bezier(.2,.9,.2,1)}
+        .reveal.visible{opacity:1;transform:none}
+        /* Card tilt */
+        .tilt{transform-style:preserve-3d;transition:transform 180ms ease}
+        @keyframes float{
+            0%{transform:translateY(0) scale(1) rotate(0deg)}
+            50%{transform:translateY(-18px) scale(1.03) rotate(6deg)}
+            100%{transform:translateY(0) scale(1) rotate(0deg)}
+        }
+        /* Glass panel - increased opacity and contrast for readability */
+        .glass{
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+            /* fallback solid with stronger contrast on browsers that don't support backdrop-filter */
+            background-color: rgba(12,14,20,0.88);
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(8px) saturate(110%);
+            -webkit-backdrop-filter: blur(8px) saturate(110%);
+            box-shadow: 0 8px 30px rgba(2,6,23,0.65);
+        }
+        /* Card accent */
+        .accent-left{position:relative}
+        .accent-left::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,#3B82F6,#6D28D9);border-radius:6px 0 0 6px}
+    /* CTA color accent for project cards (small bar at top) */
+    .accent-cta{position:relative;overflow:visible}
+    .accent-cta::after{content:'';position:absolute;left:12px;right:12px;top:-6px;height:6px;border-radius:6px;background:linear-gradient(90deg,#06b6d4,#3b82f6,#7c3aed);box-shadow:0 6px 18px rgba(59,130,246,0.14);}
+        /* Optional label rendered above the CTA bar using data-cta-label on the article */
+        .accent-cta[data-cta-label]::before{
+            content: attr(data-cta-label);
+            position:absolute;left:20px;top:-26px;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:600;color:#F8FAFC;background:linear-gradient(90deg,#0b1220,#111827);box-shadow:0 8px 20px rgba(2,6,23,0.6);transform:translateY(0);
+        }
+        /* Typewriter */
+        .typewriter{display:inline-block; color:var(--muted)}
+    /* Project icons */
+    .proj-icon{width:44px;height:44px;border-radius:10px;display:inline-grid;place-items:center;background:rgba(255,255,255,0.03);}    
+    /* Emphasize project thumbnail backgrounds */
+    .proj-thumb{width:88px;height:64px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,rgba(59,130,246,0.22),rgba(124,58,237,0.18));display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 -10px 18px rgba(0,0,0,0.28);}
+    .proj-thumb svg, .proj-thumb img{border-radius:8px}
+    /* Modal: darker backdrop and slightly stronger panel for readability */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.78);display:flex;align-items:center;justify-content:center;z-index:50}
+    .modal{max-width:720px;width:calc(100% - 48px);}
+        @media (max-width:640px){
+            .blob{width:360px;height:360px;filter:blur(36px)}
+            body{padding-left:12px;padding-right:12px}
+            .proj-icon{width:40px;height:40px}
+            .proj-thumb{width:72px;height:56px}
+            .max-w-5xl{padding-left:6px;padding-right:6px}
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12 relative overflow-x-hidden">
+
+    <div class="hero-blob" aria-hidden="true">
+        <div class="blob"></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto space-y-12 relative z-10">
+
+        <header class="text-center space-y-4 pt-8">
+            <h1 class="text-4xl md:text-5xl font-bold gradient-text">Da-won Lee</h1>
+            <p class="text-lg md:text-xl">
+                <span class="font-medium text-white">Blockchain Developer</span>
+                <span class="typewriter" id="typewriter"> — building secure smart contracts, Web3 apps, and on-chain tools.</span>
+            </p>
+            <div class="mt-4 flex items-center justify-center gap-3">
+                <a id="download-resume" href="Da-won_Resume.pdf" download="Da-won_Resume.pdf" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition-transform transform hover:-translate-y-1">
+                    Download Resume
+                </a>
+                <a href="https://github.com/Dawon-Mark-Lee" target="_blank" class="text-gray-300 hover:text-white">View GitHub →</a>
+            </div>
+        </header>
+        
+        <section class="space-y-6">
+            <h2 class="text-3xl md:text-4xl font-semibold text-center text-white">Professional Summary</h2>
+            <div class="glass rounded-2xl p-6 md:p-8 shadow-lg text-gray-300">
+                <p class="leading-relaxed">
+                    A data-driven professional with experience in financial services and a focus on blockchain technologies. I build secure smart contracts and user-friendly Web3 apps. Skilled in <strong>Solidity, JavaScript, Python</strong>, and familiar with Ethereum tooling and security practices.
+                </p>
+                <div class="mt-4 flex flex-wrap gap-3 justify-center">
+                    <span class="text-sm px-3 py-1 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white">Solidity</span>
+                    <span class="text-sm px-3 py-1 rounded-full bg-gray-700 text-gray-200">Smart Contracts</span>
+                    <span class="text-sm px-3 py-1 rounded-full bg-gray-700 text-gray-200">Security</span>
+                    <span class="text-sm px-3 py-1 rounded-full bg-gray-700 text-gray-200">Web3</span>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="space-y-8">
+            <h2 class="text-3xl md:text-4xl font-semibold text-center mb-4 text-white">Projects</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Project Card 1 -->
+                <article class="glass rounded-2xl p-5 shadow-lg hover:scale-[1.02] transition-transform relative accent-left accent-cta reveal tilt" tabindex="0" role="button" aria-labelledby="proj1-title" aria-describedby="proj1-desc" data-title="Advanced Decentralized Voting App" data-desc="A full-stack decentralized voting application on the Ethereum blockchain with smart contract election management and secure vote tallying." data-link="https://github.com/Dawon-Mark-Lee/Blockchain" data-img="images/voting" data-tech="Solidity,React,Ethers.js,IPFS">
+                    <div class="flex items-start gap-4">
+                        <div class="proj-thumb" aria-hidden="true">
+                            <!-- Virtual thumbnail: Voting (ballot box) -->
+                            <svg width="160" height="110" viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="vg1" x1="0" x2="1">
+                                        <stop offset="0" stop-color="#60a5fa" stop-opacity="0.95" />
+                                        <stop offset="1" stop-color="#7c3aed" stop-opacity="0.95" />
+                                    </linearGradient>
+                                </defs>
+                                <rect rx="8" width="160" height="110" fill="url(#vg1)" opacity="0.18" />
+                                <!-- ballot box -->
+                                <rect x="34" y="28" width="92" height="46" rx="6" fill="#0b1220" opacity="0.85" />
+                                <rect x="44" y="22" width="72" height="10" rx="4" fill="#111827" />
+                                <rect x="68" y="34" width="24" height="4" rx="2" fill="#10b981" />
+                                <!-- paper with check -->
+                                <rect x="50" y="36" width="36" height="28" rx="3" fill="#f8fafc" />
+                                <path d="M56 50l6 6 14-14" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                <circle cx="128" cy="78" r="10" fill="#ffffff" opacity="0.06" />
+                            </svg>
+                        </div>
+                        <div class="proj-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
+                        </div>
+                        <div>
+                            <h3 id="proj1-title" class="text-xl font-semibold text-blue-300">Advanced Decentralized Voting App</h3>
+                            <p id="proj1-desc" class="text-sm text-gray-300 mt-1">Smart contracts for elections, React front-end, secure vote tallying.</p>
+                            <div class="mt-3 flex gap-3">
+                                <a href="https://github.com/Dawon-Mark-Lee/Blockchain" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-200 hover:underline">View Code</a>
+                                <button class="text-sm text-gray-200 hover:text-white open-modal" data-project="1">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project Card 2 -->
+                <article class="glass rounded-2xl p-5 shadow-lg hover:scale-[1.02] transition-transform relative accent-left accent-cta reveal tilt" tabindex="0" role="button" aria-labelledby="proj2-title" aria-describedby="proj2-desc" data-title="English Auction Smart Contract" data-desc="A fully functional English auction smart contract integrated with ERC-721 for NFT transfers and secure bidding." data-link="https://github.com/Dawon-Mark-Lee/Ethereum_Smart_Contract_Go_Solidity" data-img="images/auction" data-tech="Solidity,ERC-721,Go,Hardhat">
+                    <div class="flex items-start gap-4">
+                        <div class="proj-thumb" aria-hidden="true">
+                            <!-- Virtual thumbnail: Auction (gavel + token) -->
+                            <svg width="160" height="110" viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="ag1" x1="0" x2="1">
+                                        <stop offset="0" stop-color="#7c3aed" stop-opacity="0.95" />
+                                        <stop offset="1" stop-color="#60a5fa" stop-opacity="0.95" />
+                                    </linearGradient>
+                                </defs>
+                                <rect rx="8" width="160" height="110" fill="url(#ag1)" opacity="0.16" />
+                                <!-- gavel -->
+                                <rect x="36" y="40" width="72" height="12" rx="3" fill="#0b1220" opacity="0.9" transform="rotate(-18 36 40)" />
+                                <rect x="94" y="58" width="44" height="8" rx="2" fill="#111827" transform="rotate(-18 94 58)" />
+                                <circle cx="118" cy="36" r="12" fill="#f8fafc" opacity="0.9" />
+                                <text x="118" y="40" text-anchor="middle" font-size="10" font-family="Inter, Arial" fill="#0b1220" font-weight="700">NFT</text>
+                                <!-- subtle token -->
+                                <circle cx="128" cy="78" r="8" fill="#ffffff" opacity="0.06" />
+                            </svg>
+                        </div>
+                        <div class="proj-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" /></svg>
+                        </div>
+                        <div>
+                            <h3 id="proj2-title" class="text-xl font-semibold text-purple-300">English Auction Smart Contract</h3>
+                            <p id="proj2-desc" class="text-sm text-gray-300 mt-1">Manages auction lifecycles, bid validation, and ERC-721 integration for NFTs.</p>
+                            <div class="mt-3 flex gap-3">
+                                <a href="https://github.com/Dawon-Mark-Lee/Ethereum_Smart_Contract_Go_Solidity" target="_blank" rel="noopener noreferrer" class="text-sm text-purple-200 hover:underline">View Code</a>
+                                <button class="text-sm text-gray-200 hover:text-white open-modal" data-project="2">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project Card 3 -->
+                <article class="glass rounded-2xl p-5 shadow-lg hover:scale-[1.02] transition-transform relative accent-left accent-cta reveal tilt" tabindex="0" role="button" aria-labelledby="proj3-title" aria-describedby="proj3-desc" data-title="Smart Contract Security Scanner" data-desc="A security scanner that analyzes smart contract code for common vulnerabilities using Slither and Mythril." data-link="https://github.com/Dawon-Mark-Lee/Smart_Contract_Security_Scanner" data-img="images/scanner" data-tech="Python,Slither,Mythril,Security">
+                    <div class="flex items-start gap-4">
+                        <div class="proj-thumb" aria-hidden="true">
+                            <!-- Virtual thumbnail: Scanner (magnifier + code) -->
+                            <svg width="160" height="110" viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="sg1" x1="0" x2="1">
+                                        <stop offset="0" stop-color="#6366f1" stop-opacity="0.95" />
+                                        <stop offset="1" stop-color="#06b6d4" stop-opacity="0.95" />
+                                    </linearGradient>
+                                </defs>
+                                <rect rx="8" width="160" height="110" fill="url(#sg1)" opacity="0.16" />
+                                <!-- code block -->
+                                <rect x="40" y="28" width="80" height="52" rx="6" fill="#0b1220" opacity="0.88" />
+                                <g fill="#d1d5db">
+                                    <rect x="50" y="36" width="60" height="6" rx="2" />
+                                    <rect x="50" y="48" width="40" height="6" rx="2" />
+                                    <rect x="50" y="60" width="30" height="6" rx="2" />
+                                </g>
+                                <!-- magnifier -->
+                                <circle cx="116" cy="74" r="12" fill="#f8fafc" opacity="0.9" />
+                                <rect x="124" y="80" width="16" height="4" rx="2" fill="#0b1220" transform="rotate(30 124 80)" />
+                            </svg>
+                        </div>
+                        <div class="proj-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2l1 1" /></svg>
+                        </div>
+                        <div>
+                            <h3 id="proj3-title" class="text-xl font-semibold text-indigo-300">Smart Contract Security Scanner</h3>
+                            <p id="proj3-desc" class="text-sm text-gray-300 mt-1">Automated checks for reentrancy, integer overflow, and access control issues.</p>
+                            <div class="mt-3 flex gap-3">
+                                <a href="https://github.com/Dawon-Mark-Lee/Smart_Contract_Security_Scanner" target="_blank" rel="noopener noreferrer" class="text-sm text-indigo-200 hover:underline">View Code</a>
+                                <button class="text-sm text-gray-200 hover:text-white open-modal" data-project="3">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="space-y-6">
+            <h2 class="text-3xl md:text-4xl font-semibold text-center text-white">Skills</h2>
+            <div class="glass rounded-2xl p-6 md:p-8 shadow-lg">
+                <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-gray-200">
+                    <li><span class="font-semibold text-white">Languages</span>: Solidity, JavaScript, TypeScript, Python, HTML, SQL</li>
+                    <li><span class="font-semibold text-white">Frameworks</span>: Hardhat, Truffle, React</li>
+                    <li><span class="font-semibold text-white">Concepts</span>: Blockchain, Smart Contracts, Ethereum, DeFi, NFTs, Web3, Cryptography</li>
+                    <li><span class="font-semibold text-white">Tools</span>: Ethers.js, Web3.js, MetaMask, Ganache, IPFS, Slither</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-400 space-y-3">
+            <div class="glass rounded-xl p-4 inline-block">
+                <p class="text-sm">leedawon9807@gmail.com</p>
+                <p class="text-sm"><a href="https://www.linkedin.com/in/da-won-lee/" target="_blank" class="text-blue-300 hover:underline">LinkedIn</a> • <a href="https://github.com/Dawon-Mark-Lee" target="_blank" class="text-blue-300 hover:underline">GitHub</a></p>
+            </div>
+            <p class="text-xs text-gray-500">© Da-won Lee — built with curiosity and a focus on security.</p>
+        </footer>
+
+    </div>
+
+    <!-- Modal (hidden by default) -->
+    <div id="modal" class="modal-backdrop" style="display:none;" aria-hidden="true">
+        <div class="modal glass rounded-2xl p-6 shadow-xl" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div class="flex justify-between items-start gap-4 flex-col md:flex-row">
+                <div style="flex:1; min-width:0;">
+                    <h3 id="modal-title" class="text-2xl font-semibold"></h3>
+                    <p id="modal-desc" class="text-gray-300 mt-2"></p>
+                    <div id="modal-tech" class="mt-3 flex flex-wrap gap-2" aria-hidden="false"></div>
+                </div>
+                <button id="modal-close" aria-label="Close modal" class="text-gray-300 hover:text-white">✕</button>
+            </div>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                <div id="modal-media" class="bg-gray-900 rounded-md overflow-hidden glass" style="min-height:120px; display:flex;align-items:center;justify-content:center">
+                    <!-- picture element populated by JS; expects images like images/voting.webp (and fallback .png) -->
+                </div>
+                <div class="flex flex-col gap-3">
+                    <a id="modal-link" href="#" target="_blank" class="inline-block bg-blue-600 px-4 py-2 rounded-md text-white w-max">Open Project</a>
+                    <p class="text-sm text-gray-400">More details available in the repository. Use the link above to view code and deployment instructions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Typewriter effect
+        (function(){
+            const el = document.getElementById('typewriter');
+            if(!el) return;
+            const text = el.textContent.trim();
+            el.textContent = '';
+            let i = 0;
+            const speed = 18;
+            function step(){
+                if(i <= text.length){
+                    el.textContent = text.slice(0, i) + (i % 2 === 0 ? '_' : '\u00A0');
+                    i++;
+                    setTimeout(step, speed);
+                } else {
+                    el.textContent = text; // finalize
+                }
+            }
+            setTimeout(step, 400);
+        })();
+
+        // Modal interactions
+        (function(){
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const link = document.getElementById('modal-link');
+            const closeBtn = document.getElementById('modal-close');
+
+            function openModal(data){
+                title.textContent = data.title;
+                desc.textContent = data.desc;
+                link.href = data.link || '#';
+
+                // Tech tags
+                const techEl = document.getElementById('modal-tech');
+                techEl.innerHTML = '';
+                if(data.tech){
+                    data.tech.split(',').map(s=>s.trim()).filter(Boolean).forEach(t=>{
+                        const span = document.createElement('span');
+                        span.className = 'text-xs px-2 py-1 rounded-full bg-gray-800 text-gray-200';
+                        span.textContent = t;
+                        techEl.appendChild(span);
+                    });
+                }
+
+                // Media: prefer the inline thumbnail (proj-thumb) cloned from the card when present,
+                // otherwise fall back to picture element using data.img (webp -> png).
+                const media = document.getElementById('modal-media');
+                media.innerHTML = '';
+                if(data.thumb && data.thumb.trim()){
+                    // Insert the project's thumbnail (outerHTML contains the wrapper .proj-thumb)
+                    try{
+                        media.innerHTML = data.thumb;
+                        // make sure the inserted element fills the modal nicely
+                        const inserted = media.querySelector('.proj-thumb');
+                        if(inserted){ inserted.style.width = '100%'; inserted.style.height = 'auto'; inserted.style.display = 'flex'; inserted.style.justifyContent = 'center'; }
+                    }catch(err){
+                        // fallback to image if injection fails
+                        console.warn('Failed to inject thumb into modal, falling back to image', err);
+                    }
+                } else if(data.img){
+                    const pic = document.createElement('picture');
+                    // webp source
+                    const srcWebp = document.createElement('source');
+                    srcWebp.type = 'image/webp';
+                    srcWebp.srcset = data.img + '.webp';
+                    pic.appendChild(srcWebp);
+                    // fallback png
+                    const img = document.createElement('img');
+                    img.src = data.img + '.png';
+                    img.alt = data.title + ' screenshot';
+                    img.loading = 'lazy';
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    pic.appendChild(img);
+                    media.appendChild(pic);
+                }
+
+                modal.style.display = 'flex';
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeModal(){
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+
+            document.querySelectorAll('.open-modal').forEach((btn)=>{
+                btn.addEventListener('click', (e)=>{
+                    const card = btn.closest('article');
+                    const thumbEl = card.querySelector('.proj-thumb');
+                    const data = {
+                        title: card.getAttribute('data-title') || 'Project',
+                        desc: card.getAttribute('data-desc') || '',
+                        link: card.getAttribute('data-link') || '#',
+                        img: card.getAttribute('data-img') || '',
+                        tech: card.getAttribute('data-tech') || '',
+                        thumb: thumbEl ? thumbEl.outerHTML : ''
+                    };
+                    openModal(data);
+                });
+            });
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+            document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+        })();
+
+        // Reveal on scroll and tilt interaction for project cards
+        (function(){
+            const reveals = document.querySelectorAll('.reveal');
+            if('IntersectionObserver' in window){
+                const io = new IntersectionObserver((entries)=>{
+                    entries.forEach(e=>{
+                        if(e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+                    });
+                },{threshold:0.12});
+                reveals.forEach(r=>io.observe(r));
+            } else {
+                reveals.forEach(r=>r.classList.add('visible'));
+            }
+
+            // Subtle tilt on pointer move for .tilt elements, but disable on coarse pointers (touch)
+            const tilts = document.querySelectorAll('.tilt');
+            const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+            if(!isCoarse){
+                tilts.forEach(el=>{
+                    el.addEventListener('pointermove', (ev)=>{
+                        const rect = el.getBoundingClientRect();
+                        const x = (ev.clientX - rect.left) / rect.width - 0.5; // -0.5..0.5
+                        const y = (ev.clientY - rect.top) / rect.height - 0.5;
+                        const rx = (y * 6).toFixed(2);
+                        const ry = (-x * 8).toFixed(2);
+                        el.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+                    });
+                    el.addEventListener('pointerleave', ()=>{ el.style.transform = ''; });
+                });
+            }
+
+            // Keyboard support: open modal on Enter/Space when card is focused
+            document.querySelectorAll('article[role="button"]').forEach(card=>{
+                card.addEventListener('keydown', (e)=>{
+                    if(e.key === 'Enter' || e.key === ' '){
+                        e.preventDefault();
+                        const thumbEl = card.querySelector('.proj-thumb');
+                        const data = {
+                                title: card.getAttribute('data-title') || 'Project',
+                                desc: card.getAttribute('data-desc') || '',
+                                link: card.getAttribute('data-link') || '#',
+                                img: card.getAttribute('data-img') || '',
+                                tech: card.getAttribute('data-tech') || '',
+                                thumb: thumbEl ? thumbEl.outerHTML : ''
+                            };
+                        openModal(data);
+                    }
+                });
+                // Also open modal on clicking the whole card, but ignore clicks on links/buttons or with modifier keys
+                card.addEventListener('click', (ev)=>{
+                    const tag = ev.target && ev.target.closest ? ev.target.closest('a,button') : null;
+                    if(tag) return; // let anchors and buttons behave normally
+                    if(ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey) return; // respect modifier clicks
+                    const data = {
+                        title: card.getAttribute('data-title') || 'Project',
+                        desc: card.getAttribute('data-desc') || '',
+                        link: card.getAttribute('data-link') || '#',
+                        img: card.getAttribute('data-img') || '',
+                        tech: card.getAttribute('data-tech') || ''
+                    };
+                    openModal(data);
+                });
+            });
+        })();
+    </script>
+
+</body>
+</html>

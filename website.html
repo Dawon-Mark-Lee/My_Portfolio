@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3B82F6, #6D28D9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="p-8 md:p-16">
+
+    <div class="max-w-4xl mx-auto space-y-16">
+
+        <!-- Header and Introduction Section -->
+        <header class="text-center space-y-4">
+            <h1 class="text-4xl md:text-5xl font-bold gradient-text">Blockchain Developer Portfolio</h1>
+            <p class="text-lg md:text-xl text-gray-400">
+                A showcase of my projects and skills with decentralized applications, smart contracts, and Web3 development.
+            </p>
+        </header>
+        
+        <!-- Blockchain Image Section -->
+        <section class="text-center mb-8">
+            <div class="flex justify-center">
+                
+
+[Image of blockchain network]
+
+            </div>
+        </section>
+
+        <!-- Resume Upload Section -->
+        <section class="space-y-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-semibold text-white">Resume</h2>
+            <div class="flex flex-col items-center space-y-4">
+                <button id="resume-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors duration-300">
+                    Upload Resume
+                </button>
+                <input type="file" id="resume-input" class="hidden" accept=".pdf,.doc,.docx">
+                <span id="file-name" class="text-gray-400">No file selected.</span>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="space-y-12">
+            <h2 class="text-3xl md:text-4xl font-semibold text-center mb-8 text-white">Projects</h2>
+
+            <!-- Project Card 1: To-Do List -->
+            <div class="bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg transition-transform transform hover:scale-105">
+                <h3 class="text-2xl font-bold text-blue-400 mb-2">Decentralized To-Do List</h3>
+                <p class="text-gray-400 mb-4">
+                    A simple decentralized application where users can add, complete, and delete tasks. The smart contract ensures all tasks are transparent and permanent on the blockchain.
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-gray-300">
+                    <li>**Technology Used**: Solidity, Ethereum, React, Ethers.js</li>
+                    <li>**Key Features**: Create and manage tasks on the blockchain, gas fees are required for each transaction, the user interface is a single-page application.</li>
+                </ul>
+                <a href="https://github.com/your-username/decentralized-todo-list" target="_blank" class="mt-4 inline-block text-blue-400 hover:text-blue-300 transition-colors">
+                    View Code on GitHub &rarr;
+                </a>
+            </div>
+
+            <!-- Project Card 2: NFT Minting DApp -->
+            <div class="bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg transition-transform transform hover:scale-105">
+                <h3 class="text-2xl font-bold text-purple-400 mb-2">Simple NFT Minting DApp</h3>
+                <p class="text-gray-400 mb-4">
+                    A decentralized application that allows users to mint a non-fungible token (NFT). The smart contract manages the minting process, ensuring uniqueness.
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-gray-300">
+                    <li>**Technology Used**: Solidity, Hardhat, React, Ethers.js, IPFS</li>
+                    <li>**Key Features**: Users can connect their MetaMask wallet, the smart contract handles all minting logic, NFT metadata is stored on IPFS.</li>
+                </ul>
+                <a href="https://github.com/your-username/simple-nft-dapp" target="_blank" class="mt-4 inline-block text-purple-400 hover:text-purple-300 transition-colors">
+                    View Code on GitHub &rarr;
+                </a>
+            </div>
+
+            <!-- Project Card 3: Basic Voting DApp -->
+            <div class="bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg transition-transform transform hover:scale-105">
+                <h3 class="text-2xl font-bold text-indigo-400 mb-2">Basic Voting DApp</h3>
+                <p class="text-gray-400 mb-4">
+                    A decentralized voting system that allows a set of predefined voters to vote on a proposal. It ensures a transparent and tamper-proof voting process.
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-gray-300">
+                    <li>**Technology Used**: Solidity, Truffle, Web3.js, HTML, CSS, JavaScript</li>
+                    <li>**Key Features**: Voting logic is entirely on the blockchain, only pre-approved addresses can vote, votes are publicly verifiable.</li>
+                </ul>
+                <a href="https://github.com/your-username/basic-voting-dapp" target="_blank" class="mt-4 inline-block text-indigo-400 hover:text-indigo-300 transition-colors">
+                    View Code on GitHub &rarr;
+                </a>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="space-y-6">
+            <h2 class="text-3xl md:text-4xl font-semibold text-center text-white">Skills</h2>
+            <div class="bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg">
+                <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-gray-300">
+                    <li><span class="font-semibold text-white">Languages</span>: Solidity, JavaScript, TypeScript, Python</li>
+                    <li><span class="font-semibold text-white">Frameworks</span>: Hardhat, Truffle, React</li>
+                    <li><span class="font-semibold text-white">Concepts</span>: Smart Contracts, DeFi, NFTs, Web3, Cryptography</li>
+                    <li><span class="font-semibold text-white">Tools</span>: Ethers.js, Web3.js, MetaMask, Ganache, IPFS</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer and Contact Section -->
+        <footer class="text-center text-gray-400 space-y-2">
+            <p>
+                [Your Email] | [Your LinkedIn Profile]
+            </p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.getElementById('resume-button').addEventListener('click', () => {
+            document.getElementById('resume-input').click();
+        });
+
+        document.getElementById('resume-input').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const fileNameSpan = document.getElementById('file-name');
+            if (file) {
+                fileNameSpan.textContent = `File selected: ${file.name}`;
+            } else {
+                fileNameSpan.textContent = 'No file selected.';
+            }
+        });
+    </script>
+</body>
+</html>
